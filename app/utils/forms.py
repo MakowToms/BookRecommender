@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 
-from wtforms import SubmitField, validators, SelectMultipleField
+from wtforms import SubmitField, SelectMultipleField
 from wtforms.widgets import CheckboxInput, ListWidget
 
 

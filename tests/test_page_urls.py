@@ -3,6 +3,7 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 from __future__ import print_function  # Use print() instead of print
+
 from flask import url_for
 
 

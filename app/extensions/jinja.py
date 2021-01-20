@@ -1,7 +1,8 @@
-from flask import Blueprint
-from wtforms.fields import HiddenField
-from jinja2 import evalcontextfilter, Markup
 import re
+
+from flask import Blueprint
+from jinja2 import evalcontextfilter, Markup
+from wtforms.fields import HiddenField
 
 jinja_extensions_blueprint = Blueprint('jinja_extensions_blueprint', __name__, template_folder='templates')
 

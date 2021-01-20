@@ -1,7 +1,6 @@
 # Copyright 2017 Twin Tech Labs. All rights reserved
 
-from flask import Blueprint, redirect, render_template
-from flask import url_for
+from flask import Blueprint, render_template
 
 # When using a Flask app factory we must use a blueprint to avoid needing 'app' for '@app.route'
 main_blueprint = Blueprint('main', __name__, template_folder='templates')

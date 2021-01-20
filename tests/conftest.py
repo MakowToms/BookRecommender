@@ -7,6 +7,7 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 import pytest
+
 from app import create_app
 
 # Initialize the Flask-App with test-specific settings

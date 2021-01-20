@@ -5,11 +5,9 @@ Use "python manage.py runserver" to start the development web server on localhos
 Use "python manage.py runserver --help" for additional runserver options.
 """
 
-from flask import Flask
-#from flask_migrate import MigrateCommand
-from flask.cli import FlaskGroup
-
 import click
+# from flask_migrate import MigrateCommand
+from flask.cli import FlaskGroup
 
 from app import create_app
 

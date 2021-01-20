@@ -1,14 +1,13 @@
-from celery import Celery
-from datetime import datetime
 import os
-
-from flask import Flask, session, render_template
-from flask_migrate import Migrate
-from flask.sessions import SessionInterface
+from datetime import datetime
 
 from beaker.cache import CacheManager
-from beaker.util import parse_cache_config_options
 from beaker.middleware import SessionMiddleware
+from beaker.util import parse_cache_config_options
+from celery import Celery
+from flask import Flask, render_template
+from flask.sessions import SessionInterface
+from flask_migrate import Migrate
 
 # Instantiate Flask extensions
 migrate = Migrate()
