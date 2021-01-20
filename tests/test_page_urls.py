@@ -19,5 +19,5 @@ def test_page_urls(client):
     # assert b"You have signed in successfully" not in response.data
     # assert b"Sign In to your account" in response.data
 
-    response = client.get(url_for('main.member_page'), follow_redirects=True)
+    response = client.get(url_for('main.main_page'), follow_redirects=True)
     assert response.status_code==200

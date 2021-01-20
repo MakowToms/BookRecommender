@@ -1,0 +1,48 @@
+{% extends "common/dark_base.html" %}
+
+{% block breadcrumb %}
+{% endblock %}
+{% block content %}
+{% from "common/form_macros.html" import render_field, render_submit_field %}
+<div class="card ">
+  <form action="" method="POST" class="form" role="form">
+    <div class="card-header ">
+      <strong>User Profile</strong>
+    </div>
+    <div class="card-body ">
+      <div class="form-group ">
+        <label for="nf-email ">Query</label>
+        <input type="text" class="form-control" id="query" name="query" placeholder="Enter query" value="{{query}}">
+      </div>
+      <div class="form-group ">
+        <label for="nf-password ">Details</label>
+        <input type="text" class="form-control" id="details" name="details" placeholder="Enter details" value="{{details}}">
+      </div>
+    </div>
+    <div class="card-footer ">
+      <button type="submit " class="btn btn-sm btn-primary "><i class="fa fa-dot-circle-o "></i> Submit</button>
+{#      <button type="reset " class="btn btn-sm btn-danger "><i class="fa fa-ban "></i> Reset</button>#}
+    </div>
+    {% if result %}
+    <h1>Recommendations</h1>
+    <div class="results ">
+     <table style="width:100%">
+      <tr>
+        <th>Book title</th>
+        <th>Description</th>
+        <th>Similarity</th>
+      </tr>
+      {% for row in result %}
+        <tr>
+          <td>{{row}}</td>
+          <td>desc</td>
+          <td>0.4</td>
+        </tr>
+      {% endfor %}
+     </table>
+    </div>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}
+

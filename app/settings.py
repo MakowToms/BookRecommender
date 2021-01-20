@@ -1,6 +1,7 @@
 # Settings common to all environments (development|staging|production)
 # Place environment specific settings in env_settings.py
 # An example file (env_settings_example.py) can be used as a starting point
+import os
 
 # Application settings
 APP_NAME = "Flask Starter"
@@ -9,7 +10,8 @@ APP_OWNER_NAME = "Change this in settings."
 
 # Flask settings
 CSRF_ENABLED = True
-SECRET_KEY = None
+# SECRET_KEY = None
+SECRET_KEY = os.urandom(32)
 
 # Flask-SQLAlchemy settings
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -36,8 +38,8 @@ USER_ENABLE_EMAIL = True  # Register with Email
 USER_ENABLE_REGISTRATION = True  # Allow new users to register
 USER_REQUIRE_RETYPE_PASSWORD = True  # Prompt for `retype password` in:
 USER_ENABLE_USERNAME = False  # Register and Login with username
-USER_AFTER_LOGIN_ENDPOINT = 'main.member_page'
-USER_AFTER_LOGOUT_ENDPOINT = 'main.member_page'
+USER_AFTER_LOGIN_ENDPOINT = 'main.main_page'
+USER_AFTER_LOGOUT_ENDPOINT = 'main.main_page'
 USER_ALLOW_LOGIN_WITHOUT_CONFIRMED_EMAIL = False
 
 
