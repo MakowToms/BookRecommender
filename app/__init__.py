@@ -79,7 +79,7 @@ def create_app(extra_config_settings={}):
     app.register_blueprint(jinja_extensions_blueprint)
     app.jinja_env.globals.update(now=datetime.utcnow)
 
-    from app.views.misc_views import main_blueprint
+    from app.views.main_page import main_blueprint
     app.register_blueprint(main_blueprint)
 
     # Setup an error-logger to send emails to app.config.ADMINS
