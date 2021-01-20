@@ -22,10 +22,12 @@ class Category:
         Category.categories[label] = self
 
     def word_similarity(self, word):
-        return max([similarity(synset1, synset2) for synset1 in wn.synsets(word) for synset2 in self.synsets])
+        similarities = [similarity(synset1, synset2) for synset1 in wn.synsets(word) for synset2 in self.synsets]
+        return max(similarities) if len(similarities) > 0 else 0
 
     def bag_similarity(self, bag_of_words):
-        return mean([self.word_similarity(word) for word in bag_of_words])
+        similarities = [self.word_similarity(word) for word in bag_of_words]
+        return mean(similarities) if len(similarities) > 0 else 0
 
 
 def rank_categories(bag_of_words):
