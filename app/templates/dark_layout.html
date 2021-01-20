@@ -39,9 +39,6 @@
             <a class="navbar-brand" href="{{ url_for('main.member_page') }}">
               {{ config['APP_NAME'] }}
             </a>
-            <a class="nav-link nav-link--rounded pull-right" style="margin-right: 10px;" href="{{ url_for('user.logout') }}">
-              Sign out
-            </a>
           </header>
           <div class="app-body">
             <div class="sidebar">
@@ -51,40 +48,7 @@
                   <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#">
                       <i class="nav-icon icon-bell"></i> My Account</a>
-                    <ul class="nav-dropdown-items">
-                      {% if not config.get('USER_LDAP', False) %}
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.user_profile_page') }}">
-                          <i class="nav-icon icon-drop"></i> Profile</a>
-                      </li>
-
-                      <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('user.change_password') }}">
-                          <i class="nav-icon icon-drop"></i> Password</a>
-                      </li>
-                      {% endif %}
-
-	              {% if current_user.is_authenticated %}
-			{% if current_user.has_role('admin') or current_user.has_role('dev') %}
-		          <li class="nav-item">
-			    <a class="nav-link" href="{{ url_for('apikeys.apikeys_index') }}">
-			      <i class="nav-icon icon-drop"></i> API Keys</a>
-		          </li>
-			{% endif %}
-                      {% endif %}
-
-                    </ul>
                   </li>
-
-	          {% if current_user.is_authenticated %}
-			  {% if current_user.has_role('admin') %}
-			  <li class="nav-title">Administration</li>
-			  <li class="nav-item">
-			    <a class="nav-link" href="{{ url_for('main.user_admin_page') }}">
-			      <i class="nav-icon icon-drop"></i> Manage Users</a>
-			  </li>
-			  {% endif %}
-                  {% endif %}
 
                 </ul>
               </nav>

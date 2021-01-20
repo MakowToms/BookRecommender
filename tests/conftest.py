@@ -7,7 +7,7 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 import pytest
-from app import create_app, db as the_db
+from app import create_app
 
 # Initialize the Flask-App with test-specific settings
 the_app = create_app(dict(
@@ -22,21 +22,12 @@ the_app = create_app(dict(
 # Setup an application context (since the tests run outside of the webserver context)
 the_app.app_context().push()
 
-# Create and populate roles and users tables
-from app.commands.init_db import init_db
-init_db()
-
 
 @pytest.fixture(scope='session')
 def app():
     """ Makes the 'app' parameter available to test functions. """
     return the_app
 
-
-@pytest.fixture(scope='session')
-def db():
-    """ Makes the 'db' parameter available to test functions. """
-    return the_db
 
 @pytest.fixture(scope='function')
 def session(db, request):
