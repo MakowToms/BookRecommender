@@ -7,10 +7,10 @@ from beaker.util import parse_cache_config_options
 from celery import Celery
 from flask import Flask, render_template
 from flask.sessions import SessionInterface
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 
 # Instantiate Flask extensions
-migrate = Migrate()
+# migrate = Migrate()
 
 
 def get_config():

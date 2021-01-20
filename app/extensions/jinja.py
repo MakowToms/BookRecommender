@@ -1,8 +1,8 @@
 import re
 
 from flask import Blueprint
+# from wtforms.fields import HiddenField
 from jinja2 import evalcontextfilter, Markup
-from wtforms.fields import HiddenField
 
 jinja_extensions_blueprint = Blueprint('jinja_extensions_blueprint', __name__, template_folder='templates')
 
@@ -16,9 +16,9 @@ def filesize_format(num):
     return '%.0f%s' % (num, ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][magnitude])
 
 
-@jinja_extensions_blueprint.app_template_global
-def is_hidden_field_filter(field):
-    return isinstance(field, HiddenField)
+# @jinja_extensions_blueprint.app_template_global
+# def is_hidden_field_filter(field):
+#     return isinstance(field, HiddenField)
 
 
 @jinja_extensions_blueprint.app_template_filter()
