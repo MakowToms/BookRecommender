@@ -24,8 +24,8 @@ class Category:
         Category.categories[labels[0]] = self
 
     def word_similarity(self, word: str):
-        similarities = [sqrt(similarity(synset1, synset2)) for synset1 in wn.synsets(word) for synset2 in self.synsets]
-        return mean(similarities)**2 if len(similarities) > 0 else 0
+        similarities = [similarity(synset1, synset2)**2 for synset1 in wn.synsets(word) for synset2 in self.synsets]
+        return sqrt(mean(similarities)) if len(similarities) > 0 else 0
 
     def bag_similarity(self, bag_of_words: set):
         similarities = [self.word_similarity(word) for word in bag_of_words]
