@@ -75,7 +75,9 @@ class BookCollector:
         category_ranking = rank_categories(self.bag_of_words)
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
-            for book, book_score in find_by_conditions(category, languages[0] if len(languages) != 0 else None, people):
+            for book, book_score in find_by_conditions(category,
+                                                       languages[0] if len(languages) != 0 else None,
+                                                       people if len(people) != 0 else None):
                 self.assign_score(book, cat_score * book_score)
         self.compute_final_scores()
         return sorted(self.book_scores.values(), key=lambda v: v.final_score, reverse=True)
