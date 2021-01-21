@@ -34,9 +34,9 @@
       </tr>
       {% for row in result %}
         <tr>
-          <td>{{row}}</td>
-          <td>desc</td>
-          <td>0.4</td>
+          <td>{{row.book[0]}}</td>
+          <td>{{row.book[1]}}</td>
+          <td>{{row.final_score}}</td>
         </tr>
       {% endfor %}
      </table>
