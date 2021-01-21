@@ -81,17 +81,21 @@ class QueryExecutor:
         return QueryExecutor.execute(q, prop, book)
 
     @staticmethod
-    def find_books_for_genre(genre_list: list):
+    def find_books_for_genre(genre_list: list, language=None):
         q = """
         select distinct ?s
         where {
         ?s rdf:type dbo:Book;
           dbo:literaryGenre ?value.
          VALUES ?value { <http://dbpedia.org/resource/?1> }        
+        OPTIONAL {
+            ?s dbp:language ?language ;
+            VALUES ?language { "?2" "?2"@en }
+        }
         }
         """
         genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
-        return QueryExecutor.execute(q, genre_string)
+        return QueryExecutor.execute(q, genre_string, language)
 
 
 if __name__ == "__main__":
@@ -108,4 +112,4 @@ if __name__ == "__main__":
     # QueryExecutor.find_books_by_property('dbo:literaryGenre')
     # QueryExecutor.find_property_values_for_book('dbo:literaryGenre', 'http://dbpedia.org/resource/77_Shadow_Street')
     # QueryExecutor.find_property_values_for_book('dbp:genre', 'http://dbpedia.org/resource/77_Shadow_Street')
-
+    QueryExecutor.find_property_values('dbo:language')
