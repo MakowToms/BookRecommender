@@ -81,21 +81,30 @@ class QueryExecutor:
         return QueryExecutor.execute(q, prop, book)
 
     @staticmethod
-    def find_books_for_genre(genre_list: list, language=None):
+    def find_books_by_conditions(genre_list: list, language=None, people=None):
         q = """
         select distinct ?s
         where {
         ?s rdf:type dbo:Book;
           dbo:literaryGenre ?value.
-         VALUES ?value { <http://dbpedia.org/resource/?1> }        
-        OPTIONAL {
-            ?s dbp:language ?language ;
-            VALUES ?language { "?2" "?2"@en }
-        }
+         VALUES ?value { <http://dbpedia.org/resource/?1> }
+         ?2
         }
         """
         genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
-        return QueryExecutor.execute(q, genre_string, language)
+        language_query = QueryExecutor.generate_language_query_part(language)
+        return QueryExecutor.execute(q, genre_string, language_query)
+
+    @staticmethod
+    def generate_language_query_part(language: str):
+        if language is not None:
+            return """
+            ?s dbp:language ?language .
+              BIND(LCASE(STR(?language)) AS ?lang_lower)
+              VALUES ?lang_lower { "*1" "*1"@en }
+            """.replace("*1", language.lower())
+        else:
+            return ""
 
 
 if __name__ == "__main__":
