@@ -24,3 +24,7 @@ def detect_language(bag_of_words):
 
 def detect_genre(bag_of_words):
     return detect_hyponym(bag_of_words, 'literary_composition.n.01')
+
+
+def detect_person(doc):
+    return {ent.lemma_ for ent in doc.ents if ent.label_ == 'PERSON'}
