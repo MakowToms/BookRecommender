@@ -29,3 +29,6 @@ requests==2.23.0
 
 # Development tools
 # tox==3.5.2
+
+# Sparql
+rdflib==5.0.0
