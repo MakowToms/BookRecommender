@@ -114,3 +114,7 @@ ENV/
 # --------------------------------
 
 app.sqlite
+
+# Temporary files
+sparql/temp.py
+
