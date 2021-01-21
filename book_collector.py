@@ -57,8 +57,8 @@ class BookCollector:
             self.book_scores[str(book[0])].add_score(score)
 
     def compute_final_scores(self):
-        for book in self.book_scores.keys():
-            self.book_scores[book] = self.book_scores[book].compute_score()
+        for key in self.book_scores.keys():
+            self.book_scores[key].compute_score()
 
     def collect(self):
         """
