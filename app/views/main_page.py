@@ -16,7 +16,10 @@ def main_page():
     form = BookForm(request.form)
 
     if request.method == 'POST':
+        print("Method = POSR, processing")
         scores = BookCollector(form.query.data).collect()
+        print("Processed")
+        print(scores)
         return render_template('pages/book_recommender.html', query="", details="",
                                result=[(score.book, score.final_score) for score in scores])
         # return redirect(url_for('main.example_page'))

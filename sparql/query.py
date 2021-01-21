@@ -10,6 +10,7 @@ class QueryExecutor:
     @staticmethod
     def execute(query_string, *args, pretty_print=True, limit=20):
         query_string = QueryExecutor.prepare_query_string(query_string, *args, limit=limit)
+        print(query_string)
         result = QueryExecutor.sparql_store.query(query_string, initNs=QueryExecutor.namespaces)
         if pretty_print:
             for item in list(result):
@@ -87,10 +88,12 @@ class QueryExecutor:
         where {
         ?s rdf:type dbo:Book;
           dbo:literaryGenre ?value.
-         VALUES ?value { <?2> }        
+         VALUES ?value { dbr:?1 }        
         }
         """
-        genre_string = ">, <".join(genre_list)
+        genre_string = " dbr:".join(genre_list)
+        print(genre_string)
+        print(q)
         return QueryExecutor.execute(q, genre_string)
 
 

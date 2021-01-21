@@ -51,8 +51,8 @@ class BookCollector:
         self.book_scores = dict()
 
     def assign_score(self, book, score):
-        if not self.book_scores[str(book[0])]:
-            self.book_scores[str(book[0])] = BookScores(score, book)
+        if not self.book_scores.__contains__(str(book[0])):
+            self.book_scores[str(book[0])] = BookScores(book, score)
         else:
             self.book_scores[str(book[0])].add_score(score)
 
