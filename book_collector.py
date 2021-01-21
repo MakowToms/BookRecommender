@@ -1,7 +1,7 @@
 import spacy
 
 from sparql.query import QueryExecutor
-from wordnet import bag_words, rank_categories
+from wordnet import bag_words, rank_categories, detect_language
 from wordnet.category import Category
 
 nlp = spacy.load('en_core_web_sm')
@@ -12,14 +12,15 @@ def score_book_relevance(book):
     return 1
 
 
-def find_by_category(category: Category):
+def find_by_conditions(category: Category, language: str):
     """
     Manages calling proper function to make query to DBpedia and computing relevance scores of results.
 
     :param category: possible genre properties of book ontology
+    :param language: expected language of a book
     :return: a tuple of book ontology data and its score
     """
-    books = QueryExecutor.find_books_for_genre(category.labels)
+    books = QueryExecutor.find_books_for_genre(category.labels, language=language)
     return [(book, score_book_relevance(book)) for book in books]
 
 
@@ -66,10 +67,12 @@ class BookCollector:
 
         :return: list of book URIs and names sorted by some metric
         """
+        languages = detect_language(self.bag_of_words)
+
         category_ranking = rank_categories(self.bag_of_words)
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
-            for book, book_score in find_by_category(category):
+            for book, book_score in find_by_conditions(category, languages[0] if len(languages) != 0 else ""):
                 self.assign_score(book, cat_score * book_score)
         self.compute_final_scores()
         return sorted(self.book_scores.values(), key=lambda v: v.final_score, reverse=True)
