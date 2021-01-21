@@ -101,7 +101,7 @@ class QueryExecutor:
             return """
             ?s dbp:language ?language .
               BIND(LCASE(STR(?language)) AS ?lang_lower)
-              VALUES ?lang_lower { "*1" "*1"@en }
+              FILTER(contains(?lang_lower, "*1"))
             """.replace("*1", language.lower())
         else:
             return ""
