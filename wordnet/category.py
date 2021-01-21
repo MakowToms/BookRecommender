@@ -31,7 +31,7 @@ class Category:
 
 
 def rank_categories(bag_of_words):
-    return sorted([(category.bag_similarity(bag_of_words), label) for label, category in Category.categories.items()],
+    return sorted([(label, category.bag_similarity(bag_of_words)) for label, category in Category.categories.items()],
                   reverse=True)
 
 

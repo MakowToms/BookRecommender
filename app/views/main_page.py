@@ -3,6 +3,7 @@
 from flask import request, url_for, flash, send_from_directory, jsonify, render_template_string
 from flask import Blueprint, render_template
 
+from book_collector import BookCollector
 from wordnet import bag_words, detect_language, rank_categories, detect_genre
 from ..models.forms import BookForm
 
@@ -15,15 +16,9 @@ def main_page():
     form = BookForm(request.form)
 
     if request.method == 'POST':
-        x = bag_words(form.query.data)
-        categories = rank_categories(x)
-        langs = detect_language(x)
-        genres = detect_genre(x)
-        print(f'Data: {form.query.data}')
-        print(f'Categories ranked: {categories}')
-        print(f'Languages found: {langs}')
-        print(f'Genres found: {genres}')
-        return render_template('pages/book_recommender.html', query="", details="", result=categories)
+        scores = BookCollector(form.query.data).collect()
+        return render_template('pages/book_recommender.html', query="", details="",
+                               result=[(score.book, score.final_score) for score in scores])
         # return redirect(url_for('main.example_page'))
 
     return render_template('pages/book_recommender.html', query="Red turtle swims fast", details="Details", result=None)

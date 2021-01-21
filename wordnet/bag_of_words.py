@@ -1,10 +1,6 @@
-from nltk.corpus import stopwords
-import re
-
-stop_words = set(stopwords.words('english'))
+from wordnet.utils import whitespace_to_underscores
 
 
-def bag_words(text):
-    text = re.sub(r'[^\w\'\s]', '', text)
-    words = re.split(r'[\'\s]', text)
-    return [word for word in words if word.lower() not in stop_words]
+def bag_words(doc):
+    return {word.lemma_ for word in doc if word.is_alpha and not word.is_stop}.union(
+        whitespace_to_underscores(doc.noun_chunks))
