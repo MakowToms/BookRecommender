@@ -2,6 +2,7 @@ import spacy
 
 from sparql.query import QueryExecutor
 from wordnet import bag_words, rank_categories
+from wordnet.category import Category
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -11,14 +12,14 @@ def score_book_relevance(book):
     return 1
 
 
-def find_by_category(category):
+def find_by_category(category: Category):
     """
     Manages calling proper function to make query to DBpedia and computing relevance scores of results.
 
-    :param category: genre property of book ontology
+    :param category: possible genre properties of book ontology
     :return: a tuple of book ontology data and its score
     """
-    books = QueryExecutor.find_by_property("dbp:genre", "dbr:" + category)
+    books = QueryExecutor.find_books_for_genre(category.labels)
     return [(book, score_book_relevance(book)) for book in books]
 
 
@@ -44,7 +45,7 @@ class BookScores:
 
 
 class BookCollector:
-    def __init__(self, query):
+    def __init__(self, query: str):
         self.doc = nlp(query)
         self.bag_of_words = bag_words(self.doc)
         self.book_scores = dict()
