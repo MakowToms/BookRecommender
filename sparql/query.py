@@ -80,6 +80,19 @@ class QueryExecutor:
         """
         return QueryExecutor.execute(q, prop, book)
 
+    @staticmethod
+    def find_books_for_genre(genre_list: list):
+        q = """
+        select distinct ?s
+        where {
+        ?s rdf:type dbo:Book;
+          dbo:literaryGenre ?value.
+         VALUES ?value { <?2> }        
+        }
+        """
+        genre_string = ">, <".join(genre_list)
+        return QueryExecutor.execute(q, genre_string)
+
 
 if __name__ == "__main__":
     pass
