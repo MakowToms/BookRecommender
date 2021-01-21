@@ -81,7 +81,7 @@ class QueryExecutor:
         return QueryExecutor.execute(q, prop, book)
 
     @staticmethod
-    def find_books_by_conditions(genre_list: list, language=None, people=None):
+    def find_books_by_conditions(genre_list: list, language: str = None, people: set = None):
         q = """
         select distinct ?s
         where {
@@ -89,11 +89,13 @@ class QueryExecutor:
           dbo:literaryGenre ?value.
          VALUES ?value { <http://dbpedia.org/resource/?1> }
          ?2
+         ?3
         }
         """
         genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
         language_query = QueryExecutor.generate_language_query_part(language)
-        return QueryExecutor.execute(q, genre_string, language_query)
+        people_query = QueryExecutor.generate_people_query_part(people)
+        return QueryExecutor.execute(q, genre_string, language_query, people_query)
 
     @staticmethod
     def generate_language_query_part(language: str):
@@ -103,6 +105,18 @@ class QueryExecutor:
               BIND(LCASE(STR(?language)) AS ?lang_lower)
               FILTER(contains(?lang_lower, "*1"))
             """.replace("*1", language.lower())
+        else:
+            return ""
+
+    @staticmethod
+    def generate_people_query_part(people: set):
+        if people is not None:
+            return """
+            ?s ?prop ?persona .
+            ?persona rdfs:label ?name
+              BIND(LCASE(STR(?name)) AS ?name_lower)
+              FILTER(?name_lower IN ("*1"))
+            """.replace("*1", '", "'.join(people).lower())
         else:
             return ""
 
