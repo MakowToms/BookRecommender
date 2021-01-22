@@ -27,14 +27,12 @@
         <th style="border: 2px solid black;">Book title</th>
         <th style="border: 2px solid black;">Description</th>
         <th style="border: 2px solid black;">Similarity</th>
-        <th style="border: 2px solid black;">Score details</th>
       </tr>
       {% for row in result %}
         <tr style="border: 2px solid black;">
           <td style="border: 2px solid black;">{{row.book[1]}}</td>
           <td style="border: 2px solid black;">{{row.book[2]}}</td>
           <td style="border: 2px solid black;">{{row.final_score}}</td>
-          <td style="border: 2px solid black;">{{row.scores}}</td>
         </tr>
       {% endfor %}
      </table>
