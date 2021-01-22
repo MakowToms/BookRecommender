@@ -19,7 +19,7 @@ def detect_hyponym(bag_of_words, condition_synset):
 def detect_language(bag_of_words):
     # Cannot use natural_language.n.01, because one might want a book in esperanto
     # Excluding programming languages, though
-    return list(detect_hyponym(bag_of_words, 'language.n.01') - detect_hyponym(bag_of_words, 'programming_language.n.01'))
+    return detect_hyponym(bag_of_words, 'language.n.01') - detect_hyponym(bag_of_words, 'programming_language.n.01')
 
 
 def detect_genre(bag_of_words):

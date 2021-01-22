@@ -69,7 +69,7 @@ class BookCollector:
 
         :return: list of book URIs and names sorted by some metric
         """
-        languages = detect_language(self.bag_of_words)
+        languages = list(detect_language(self.bag_of_words))
         people = detect_person(self.doc)
 
         category_ranking = rank_categories(self.bag_of_words)
