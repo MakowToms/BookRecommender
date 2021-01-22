@@ -35,7 +35,7 @@ class QueryExecutor:
         return QueryExecutor.execute(q, limit=limit)
 
     @staticmethod
-    def find_property_values(prop):
+    def find_property_values(prop, limit=20):
         q = """
         select distinct ?value
         where {
@@ -43,10 +43,10 @@ class QueryExecutor:
           ?1 ?value.
         }
         """
-        return QueryExecutor.execute(q, prop)
+        return QueryExecutor.execute(q, prop, limit=limit)
 
     @staticmethod
-    def find_books_by_property_value(prop, value):
+    def find_books_by_property_value(prop, value, limit=20):
         q = """
         select distinct ?s ?value
         where {
@@ -55,10 +55,10 @@ class QueryExecutor:
          VALUES ?value { <?2> }        
         }
         """
-        return QueryExecutor.execute(q, prop, value)
+        return QueryExecutor.execute(q, prop, value, limit=limit)
 
     @staticmethod
-    def find_books_by_property(prop):
+    def find_books_with_property(prop, limit=20):
         q = """
         select distinct ?s ?value
         where {
@@ -66,10 +66,10 @@ class QueryExecutor:
           ?1 ?value.
         }
         """
-        return QueryExecutor.execute(q, prop)
+        return QueryExecutor.execute(q, prop, limit=limit)
 
     @staticmethod
-    def find_property_values_for_book(prop, book):
+    def find_property_values_for_book(prop, book, limit=20):
         q = """
         select distinct ?value
         where {
@@ -78,10 +78,10 @@ class QueryExecutor:
          VALUES ?s { <?2> }        
         }
         """
-        return QueryExecutor.execute(q, prop, book)
+        return QueryExecutor.execute(q, prop, book, limit=limit)
 
     @staticmethod
-    def find_books_by_conditions(genre_list: list, language: str = None, people: set = None):
+    def find_books_by_conditions(genre_list: list, language: str = None, people: set = None, limit=20):
         q = """
         select distinct ?s
         where {
@@ -95,7 +95,7 @@ class QueryExecutor:
         genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
         language_query = QueryExecutor.generate_language_query_part(language)
         people_query = QueryExecutor.generate_people_query_part(people)
-        return QueryExecutor.execute(q, genre_string, language_query, people_query)
+        return QueryExecutor.execute(q, genre_string, language_query, people_query, limit=limit)
 
     @staticmethod
     def generate_language_query_part(language: str):
@@ -135,4 +135,6 @@ if __name__ == "__main__":
     # QueryExecutor.find_books_by_property('dbo:literaryGenre')
     # QueryExecutor.find_property_values_for_book('dbo:literaryGenre', 'http://dbpedia.org/resource/77_Shadow_Street')
     # QueryExecutor.find_property_values_for_book('dbp:genre', 'http://dbpedia.org/resource/77_Shadow_Street')
-    QueryExecutor.find_property_values('dbo:language')
+    # QueryExecutor.find_property_values('dbo:language')
+    # QueryExecutor.find_books_with_property('dbo:country', limit=50)
+    QueryExecutor.find_wikidata_properties()
