@@ -22,19 +22,19 @@
     {% if result %}
     <h1>Recommendations</h1>
     <div class="results ">
-     <table style="width:100%">
-      <tr>
-        <th>Book title</th>
-        <th>Description</th>
-        <th>Similarity</th>
-        <th>Score details</th>
+     <table style="border: 2px solid black; width:100%">
+      <tr style="border: 2px solid black;">
+        <th style="border: 2px solid black;">Book title</th>
+        <th style="border: 2px solid black;">Description</th>
+        <th style="border: 2px solid black;">Similarity</th>
+        <th style="border: 2px solid black;">Score details</th>
       </tr>
       {% for row in result %}
-        <tr>
-          <td>{{row.book[1]}}</td>
-          <td>{{row.book[2]}}</td>
-          <td>{{row.final_score}}</td>
-          <td>{{row.scores}}</td>
+        <tr style="border: 2px solid black;">
+          <td style="border: 2px solid black;">{{row.book[1]}}</td>
+          <td style="border: 2px solid black;">{{row.book[2]}}</td>
+          <td style="border: 2px solid black;">{{row.final_score}}</td>
+          <td style="border: 2px solid black;">{{row.scores}}</td>
         </tr>
       {% endfor %}
      </table>
