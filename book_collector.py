@@ -17,7 +17,7 @@ def compute_list_score(scores: list):
 
 class BookScores:
     def __init__(self, book, score, bag_of_words):
-        self.__scores = [score]
+        self.scores = [score]
         self.book = book
         self.book_relevance = self.score_book_relevance(bag_of_words)
         self.final_score = 0
@@ -28,7 +28,7 @@ class BookScores:
         return bag_bag_similarity(bag_words(abstract_doc), bag_of_words)
 
     def add_score(self, score):
-        self.__scores.append(score)
+        self.scores.append(score)
 
     def compute_score(self):
         """
@@ -36,7 +36,7 @@ class BookScores:
 
         :return: a number in range [0, 10]
         """
-        self.final_score = round(10 * self.book_relevance * (compute_list_score(self.__scores)), 2)
+        self.final_score = round(10 * self.book_relevance * (compute_list_score(self.scores)), 2)
 
 
 class BookCollector:
