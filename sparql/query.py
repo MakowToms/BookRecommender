@@ -83,10 +83,14 @@ class QueryExecutor:
     @staticmethod
     def find_books_by_conditions(genre_list: list, language: str = None, people: set = None, limit=20):
         q = """
-        select distinct ?s
+        select distinct ?book ?bookName ?bookAbstract
         where {
-        ?s rdf:type dbo:Book;
+        ?book rdf:type dbo:Book;
           dbo:literaryGenre ?value.
+        OPTIONAL { ?book foaf:name ?bookName. 
+                FILTER(lang(?bookName) = "en")}
+        OPTIONAL { ?book  dbo:abstract  ?bookAbstract. 
+                FILTER(lang(?bookAbstract) = "en")}
          VALUES ?value { <http://dbpedia.org/resource/?1> }
          ?2
          ?3
@@ -137,4 +141,3 @@ if __name__ == "__main__":
     # QueryExecutor.find_property_values_for_book('dbp:genre', 'http://dbpedia.org/resource/77_Shadow_Street')
     # QueryExecutor.find_property_values('dbo:language')
     # QueryExecutor.find_books_with_property('dbo:country', limit=50)
-    QueryExecutor.find_wikidata_properties()
