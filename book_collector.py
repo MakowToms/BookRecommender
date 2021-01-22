@@ -3,7 +3,7 @@ import spacy
 from sparql.query import QueryExecutor
 from wordnet import bag_words, rank_categories, detect_language
 from wordnet.category import Category
-from wordnet.detect_hyponym import detect_person
+from wordnet.detect_hyponym import detect_person, detect_work_of_art
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -71,13 +71,15 @@ class BookCollector:
         """
         languages = list(detect_language(self.bag_of_words))
         people = detect_person(self.doc)
+        work_of_art = list(detect_work_of_art(self.doc))
 
         category_ranking = rank_categories(self.bag_of_words)
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
             for book, book_score in find_by_conditions(category,
                                                        languages[0] if len(languages) != 0 else None,
-                                                       people if len(people) != 0 else None):
+                                                       people if len(people) != 0 else None,
+                                                       work_of_art[0] if len(work_of_art) != 0 else None):
                 self.assign_score(book, cat_score * book_score)
         self.compute_final_scores()
         return sorted(self.book_scores.values(), key=lambda v: v.final_score, reverse=True)

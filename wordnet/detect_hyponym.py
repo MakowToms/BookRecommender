@@ -28,3 +28,7 @@ def detect_genre(bag_of_words):
 
 def detect_person(doc):
     return {ent.lemma_ for ent in doc.ents if ent.label_ == 'PERSON'}
+
+
+def detect_work_of_art(doc):
+    return {ent.lemma_ for ent in doc.ents if ent.label_ == 'WORK_OF_ART'}
