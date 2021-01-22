@@ -2,39 +2,23 @@ import spacy
 
 from sparql.query import QueryExecutor
 from wordnet import bag_words, rank_categories, detect_language
-from wordnet.category import Category
+from wordnet.category import bag_bag_similarity
 from wordnet.detect_hyponym import detect_person, detect_work_of_art
 
 nlp = spacy.load('en_core_web_sm')
 
 
-def score_book_relevance(book, category: Category):
-    abstract_doc = nlp(str(book[2]))
-    return category.bag_similarity(bag_words(abstract_doc))
-
-
-def find_by_conditions(category: Category, language: str, people: set, work_of_art: str):
-    """
-    Manages calling proper function to make query to DBpedia and computing relevance scores of results.
-
-    :param category: possible genre properties of book ontology
-    :param language: expected language of a book
-    :param people: possible people (fictional or not) related to a book
-    :param work_of_art: expected title of a work, possibly a book
-    :return: a tuple of book ontology data and its score
-    """
-    books = QueryExecutor.find_books_by_conditions(category.labels,
-                                                   language=language,
-                                                   people=people,
-                                                   book_name=work_of_art)
-    return [(book, score_book_relevance(book, category)) for book in books]
-
-
 class BookScores:
-    def __init__(self, book, score):
+    def __init__(self, book, score, bag_of_words):
         self.__scores = [score]
         self.book = book
+        self.book_relevance = self.score_book_relevance(bag_of_words)
         self.final_score = 0
+
+    def score_book_relevance(self, bag_of_words):
+        book_abstract = str(self.book[2])
+        abstract_doc = nlp(book_abstract)
+        return bag_bag_similarity(bag_words(abstract_doc), bag_of_words)
 
     def add_score(self, score):
         self.__scores.append(score)
@@ -48,7 +32,7 @@ class BookScores:
         self.final_score = 1
         for score in self.__scores:
             self.final_score *= 1 - score
-        self.final_score = round(10 * (1 - self.final_score), 2)
+        self.final_score = round(10 * self.book_relevance * (1 - self.final_score), 2)
 
 
 class BookCollector:
@@ -59,7 +43,7 @@ class BookCollector:
 
     def assign_score(self, book, score):
         if not self.book_scores.__contains__(str(book[0])):
-            self.book_scores[str(book[0])] = BookScores(book, score)
+            self.book_scores[str(book[0])] = BookScores(book, score, self.bag_of_words)
         else:
             self.book_scores[str(book[0])].add_score(score)
 
@@ -83,7 +67,7 @@ class BookCollector:
         category_ranking = rank_categories(self.bag_of_words)
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
-            for book, book_score in find_by_conditions(category, language, people, work_of_art):
-                self.assign_score(book, cat_score * book_score)
+            for book in QueryExecutor.find_books_by_conditions(category, language, people, work_of_art):
+                self.assign_score(book, cat_score)
         self.compute_final_scores()
         return sorted(self.book_scores.values(), key=lambda v: v.final_score, reverse=True)

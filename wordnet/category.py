@@ -7,12 +7,21 @@ from nltk.corpus.reader import Synset
 from wordnet.utils import merge_synsets
 
 
-def similarity(synset1: Synset, synset2: Synset):
+def synset_similarity(synset1: Synset, synset2: Synset):
     # used with lch_similarity
     # if synset1.pos() != synset2.pos():
     #     return 0
     res = synset1.wup_similarity(synset2)
     return res if res is not None else 0
+
+
+def word_word_similarity(synset_list1: list, synset_list2: list):
+    return [synset_similarity(synset1, synset2) ** 2 for synset1 in synset_list1 for synset2 in synset_list2]
+
+
+def bag_bag_similarity(bag1, bag2):
+    similarities = [word_word_similarity(wn.synsets(word1), wn.synsets(word2)) for word1 in bag1 for word2 in bag2]
+    return sqrt(mean(similarities)) if len(similarities) > 0 else 0
 
 
 class Category:
@@ -24,7 +33,7 @@ class Category:
         Category.categories[labels[0]] = self
 
     def word_similarity(self, word: str):
-        similarities = [similarity(synset1, synset2)**2 for synset1 in wn.synsets(word) for synset2 in self.synsets]
+        similarities = word_word_similarity(wn.synsets(word), self.synsets)
         return sqrt(mean(similarities)) if len(similarities) > 0 else 0
 
     def bag_similarity(self, bag_of_words: set):
