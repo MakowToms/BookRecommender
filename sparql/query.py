@@ -87,8 +87,16 @@ class QueryExecutor:
         where {
         ?book rdf:type dbo:Book;
           dbo:literaryGenre ?value.
-        OPTIONAL { ?book foaf:name ?bookName. 
-                FILTER(lang(?bookName) = "en")}
+        OPTIONAL { ?book foaf:name ?bookNameFoaf. 
+                FILTER(lang(?bookNameFoaf) = "en")}
+        OPTIONAL { ?book rdfs:label ?bookLabel. 
+                FILTER(lang(?bookLabel) = "en")}
+        OPTIONAL { ?book dbp:name ?bookNameDbp. 
+                FILTER(lang(?bookNameDbp) = "en")}
+        BIND(if(bound(?bookNameFoaf), ?bookNameFoaf, 
+                if(bound(?bookLabel), ?bookLabel, 
+                if(bound(?bookNameDbp), ?bookNameDbp, substr(str(?book), 29))
+                )) as ?bookName)
         OPTIONAL { ?book  dbo:abstract  ?bookAbstract. 
                 FILTER(lang(?bookAbstract) = "en")}
          VALUES ?value { <http://dbpedia.org/resource/?1> }
