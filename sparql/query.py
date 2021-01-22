@@ -100,18 +100,28 @@ class QueryExecutor:
                 )) as ?bookName)
         OPTIONAL { ?book  dbo:abstract  ?bookAbstract. 
                 FILTER(lang(?bookAbstract) = "en")}
-         VALUES ?value { <http://dbpedia.org/resource/?1> }
+         ?1
          ?2
          ?3
          ?4
         }
         """
-        genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
+        genre_query = QueryExecutor.generate_genre_query_part(genre_list)
         language_query = QueryExecutor.generate_language_query_part(language)
         people_query = QueryExecutor.generate_people_query_part(people)
         book_name_query = QueryExecutor.generate_book_name_query_part(book_name)
-        return QueryExecutor.execute(q, genre_string, language_query, people_query,
+        return QueryExecutor.execute(q, genre_query, language_query, people_query,
                                      book_name_query, limit=limit)
+
+    @staticmethod
+    def generate_genre_query_part(genre_list: list):
+        if genre_list is not None:
+            genre_string = "> <http://dbpedia.org/resource/".join(genre_list)
+            return """
+             VALUES ?value { <http://dbpedia.org/resource/*1> }
+             """.replace("*1", genre_string)
+        else:
+            return ""
 
     @staticmethod
     def generate_language_query_part(language: str):
