@@ -13,7 +13,7 @@ def score_book_relevance(book):
     return 1
 
 
-def find_by_conditions(category: Category, language: str, people: set):
+def find_by_conditions(category: Category, language: str, people: set, work_of_art: str):
     """
     Manages calling proper function to make query to DBpedia and computing relevance scores of results.
 
@@ -22,7 +22,10 @@ def find_by_conditions(category: Category, language: str, people: set):
     :param people: possible people (fictional or not) related to a book
     :return: a tuple of book ontology data and its score
     """
-    books = QueryExecutor.find_books_by_conditions(category.labels, language=language, people=people)
+    books = QueryExecutor.find_books_by_conditions(category.labels,
+                                                   language=language,
+                                                   people=people,
+                                                   book_name=work_of_art)
     return [(book, score_book_relevance(book)) for book in books]
 
 
