@@ -4,7 +4,6 @@ from wtforms import StringField, SubmitField, validators, PasswordField, Boolean
 
 
 class BookForm(FlaskForm):
-    query = TextAreaField('Query', validators=[])
-    details = StringField('Details')
+    query = TextAreaField('Query')
 
 
