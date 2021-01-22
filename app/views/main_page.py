@@ -19,7 +19,10 @@ def main_page():
     if request.method == 'POST':
         try:
             scores = BookCollector(form.query.data).collect()
-            return render_template('pages/book_recommender.html', query="", details="",
+            for score in scores:
+                print(score.book[1])
+                print(score.scores, "\n")
+            return render_template('pages/book_recommender.html', query=form.query.data,
                                    result=scores)
         except HTTPError as e:
             print(e)
@@ -29,7 +32,7 @@ def main_page():
 
         # return redirect(url_for('main.example_page'))
 
-    return render_template('pages/book_recommender.html', query="Red turtle swims fast", details="Details", result=None)
+    return render_template('pages/book_recommender.html', query="Red turtle swims fast", result=None)
 
 
 @main_blueprint.route('/example')
