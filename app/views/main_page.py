@@ -23,7 +23,7 @@ def main_page():
                 print(score.book[1])
                 print(score.scores, "\n")
             return render_template('pages/book_recommender.html', query=form.query.data,
-                                   result=scores)
+                                   result=scores[:10])
         except HTTPError as e:
             print(e)
             error = str(e)
