@@ -93,18 +93,18 @@ class BookCollector:
 
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
-            for book in QueryExecutor.find_books_by_conditions(category):
+            for book in QueryExecutor.find_books_by_conditions(category.categories):
                 self.assign_score(book, cat_score)
 
             if people is not None:
-                for book in QueryExecutor.find_books_by_conditions(category, people=people):
+                for book in QueryExecutor.find_books_by_conditions(category.categories, people=people):
                     self.assign_score(book, compute_list_score([0.6,  cat_score]))
 
             if language is not None:
-                for book in QueryExecutor.find_books_by_conditions(category, language=language):
+                for book in QueryExecutor.find_books_by_conditions(category.categories, language=language):
                     self.assign_score(book, compute_list_score([0.3,  cat_score]))
                 if people is not None:
-                    for book in QueryExecutor.find_books_by_conditions(category, language=language, people=people):
+                    for book in QueryExecutor.find_books_by_conditions(category.categories, language=language, people=people):
                         self.assign_score(book, compute_list_score([0.7, cat_score]))
 
         self.compute_final_scores()
