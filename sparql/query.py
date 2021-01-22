@@ -84,7 +84,7 @@ class QueryExecutor:
     def find_books_by_conditions(genre_list: list = None, language: str = None,
                                  people: set = None, book_name: str = None, limit=20):
         q = """
-        select distinct ?book ?bookName ?bookAbstract
+        select distinct ?book SAMPLE(?bookName AS ?bookNameSampled) SAMPLE(?bookAbstract AS ?bookAbstractSampled)
         where {
         ?book rdf:type dbo:Book;
           dbo:literaryGenre ?value.
@@ -105,6 +105,7 @@ class QueryExecutor:
          ?3
          ?4
         }
+        GROUP BY ?book
         """
         genre_query = QueryExecutor.generate_genre_query_part(genre_list)
         language_query = QueryExecutor.generate_language_query_part(language)
