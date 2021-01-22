@@ -16,12 +16,13 @@ def synset_similarity(synset1: Synset, synset2: Synset):
 
 
 def word_word_similarity(synset_list1: list, synset_list2: list):
-    return [synset_similarity(synset1, synset2) ** 2 for synset1 in synset_list1 for synset2 in synset_list2]
+    similarities = [synset_similarity(synset1, synset2) ** 2 for synset1 in synset_list1 for synset2 in synset_list2]
+    return sqrt(mean(similarities)) if len(similarities) > 0 else 0
 
 
 def bag_bag_similarity(bag1, bag2):
     similarities = [word_word_similarity(wn.synsets(word1), wn.synsets(word2)) for word1 in bag1 for word2 in bag2]
-    return sqrt(mean(similarities)) if len(similarities) > 0 else 0
+    return mean(similarities) if len(similarities) > 0 else 0
 
 
 class Category:
@@ -33,8 +34,7 @@ class Category:
         Category.categories[labels[0]] = self
 
     def word_similarity(self, word: str):
-        similarities = word_word_similarity(wn.synsets(word), self.synsets)
-        return sqrt(mean(similarities)) if len(similarities) > 0 else 0
+        return word_word_similarity(wn.synsets(word), self.synsets)
 
     def bag_similarity(self, bag_of_words: set):
         similarities = [self.word_similarity(word) for word in bag_of_words]
