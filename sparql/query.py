@@ -127,7 +127,7 @@ class QueryExecutor:
     def generate_language_query_part(language: str):
         if language is not None:
             return """
-            ?s dbp:language ?language .
+            ?book dbp:language ?language .
               BIND(LCASE(STR(?language)) AS ?lang_lower)
               FILTER(contains(?lang_lower, "*1"))
             """.replace("*1", language.lower())
@@ -138,7 +138,7 @@ class QueryExecutor:
     def generate_people_query_part(people: set):
         if people is not None:
             return """
-            ?s ?prop ?persona .
+            ?book ?prop ?persona .
             ?persona rdfs:label ?name
               BIND(LCASE(STR(?name)) AS ?name_lower)
               FILTER(?name_lower IN ("*1"))
