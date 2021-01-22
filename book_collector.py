@@ -8,6 +8,13 @@ from wordnet.detect_hyponym import detect_person, detect_work_of_art
 nlp = spacy.load('en_core_web_sm')
 
 
+def compute_list_score(scores: list):
+    result = 1
+    for score in scores:
+        result *= 1 - score
+    return 1 - result
+
+
 class BookScores:
     def __init__(self, book, score, bag_of_words):
         self.__scores = [score]
@@ -29,10 +36,7 @@ class BookScores:
 
         :return: a number in range [0, 10]
         """
-        self.final_score = 1
-        for score in self.__scores:
-            self.final_score *= 1 - score
-        self.final_score = round(10 * self.book_relevance * (1 - self.final_score), 2)
+        self.final_score = round(10 * self.book_relevance * (compute_list_score(self.__scores)), 2)
 
 
 class BookCollector:
@@ -62,12 +66,46 @@ class BookCollector:
         people = detect_person(self.doc)
         people = people if len(people) != 0 else None
         works_of_art = list(detect_work_of_art(self.doc))
-        work_of_art = works_of_art[0] if len(works_of_art) != 0 else None
+        book_name = works_of_art[0] if len(works_of_art) != 0 else None
 
         category_ranking = rank_categories(self.bag_of_words)
+
+        # find exactly written works of art
+        if book_name is not None:
+            for book in QueryExecutor.find_books_by_conditions(book_name=book_name):
+                self.assign_score(book, 0.5)
+            if people is not None:
+                for book in QueryExecutor.find_books_by_conditions(people=people, book_name=book_name):
+                    self.assign_score(book, 0.8)
+
+        # find books made in language
+        if language is not None:
+            for book in QueryExecutor.find_books_by_conditions(language=language):
+                self.assign_score(book, 0.3)
+            if people is not None:
+                for book in QueryExecutor.find_books_by_conditions(language=language, people=people):
+                    self.assign_score(book, 0.7)
+
+        # find peoples in books
+        if people is not None:
+            for book in QueryExecutor.find_books_by_conditions(people=people):
+                self.assign_score(book, 0.6)
+
         # Select only top 3 categories
         for category, cat_score in category_ranking[:3]:
-            for book in QueryExecutor.find_books_by_conditions(category, language, people, work_of_art):
+            for book in QueryExecutor.find_books_by_conditions(category):
                 self.assign_score(book, cat_score)
+
+            if people is not None:
+                for book in QueryExecutor.find_books_by_conditions(category, people=people):
+                    self.assign_score(book, compute_list_score([0.6,  cat_score]))
+
+            if language is not None:
+                for book in QueryExecutor.find_books_by_conditions(category, language=language):
+                    self.assign_score(book, compute_list_score([0.3,  cat_score]))
+                if people is not None:
+                    for book in QueryExecutor.find_books_by_conditions(category, language=language, people=people):
+                        self.assign_score(book, compute_list_score([0.7, cat_score]))
+
         self.compute_final_scores()
         return sorted(self.book_scores.values(), key=lambda v: v.final_score, reverse=True)

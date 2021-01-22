@@ -81,7 +81,7 @@ class QueryExecutor:
         return QueryExecutor.execute(q, prop, book, limit=limit)
 
     @staticmethod
-    def find_books_by_conditions(genre_list: list, language: str = None,
+    def find_books_by_conditions(genre_list: list = None, language: str = None,
                                  people: set = None, book_name: str = None, limit=20):
         q = """
         select distinct ?book ?bookName ?bookAbstract
