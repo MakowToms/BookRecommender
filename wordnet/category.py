@@ -21,7 +21,7 @@ def word_word_similarity(synset_list1: list, synset_list2: list):
 
 
 def bag_bag_similarity(bag, reference_bag):
-    similarities = [[word_word_similarity(wn.synsets(word), wn.synsets(reference_word)) for reference_word in reference_bag] for word in bag]
+    similarities = [[word_word_similarity(wn.synsets(word), wn.synsets(reference_word)) for word in bag] for reference_word in reference_bag]
     max_similarities = [max(s) if len(s) > 0 else 0 for s in similarities]
     return mean(max_similarities) if len(max_similarities) > 0 else 0
 
